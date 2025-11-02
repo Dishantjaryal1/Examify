@@ -16,7 +16,11 @@ const resultSchema = new mongoose.Schema({
     autoSubmitted: { type: Boolean, default: false },
     tabSwitches: { type: Number, default: 0 },
     duration: { type: Number, default: 0 }, // Duration in seconds
+    timeExceeded: { type: Boolean, default: false },
     completedAt: { type: Date, default: Date.now }
 });
+
+// Add unique index to prevent duplicate results for same user and exam
+resultSchema.index({ user: 1, exam: 1 }, { unique: true });
 
 module.exports = mongoose.model('Result', resultSchema);

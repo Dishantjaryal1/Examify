@@ -27,6 +27,9 @@ const Auth = () => {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('username', response.data.username);
+                if (response.data.userId) {
+                    localStorage.setItem('userId', response.data.userId);
+                }
 
                 window.location.href = '/dashboard';
             }

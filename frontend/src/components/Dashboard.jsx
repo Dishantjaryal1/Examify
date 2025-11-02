@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Plus, Award } from 'lucide-react';
+import { BookOpen, Plus, Award, Eye } from 'lucide-react';
 import { API_URL } from '../utils/api';
 
 const Dashboard = () => {
@@ -128,6 +128,11 @@ const Dashboard = () => {
                             <div className="flex items-center mb-4 text-indigo-600">
                                 <BookOpen size={16} className="mr-2" />
                                 <p className="text-gray-600">{exam.questions.length} Questions</p>
+                                {exam.timeLimit && (
+                                    <span className="ml-4 text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                        {exam.timeLimit} min
+                                    </span>
+                                )}
                             </div>
                             
                             <Link to={`/exam/${exam._id}`}>
@@ -139,6 +144,19 @@ const Dashboard = () => {
                                     {role === 'examiner' ? 'View Exam' : 'Take Exam'}
                                 </motion.button>
                             </Link>
+                            
+                            {role === 'examiner' && (
+                                <Link to={`/proctoring/${exam._id}`}>
+                                    <motion.button 
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.97 }}
+                                        className="w-full mt-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-2 rounded-lg shadow transition flex items-center justify-center text-sm"
+                                    >
+                                        <Eye size={16} className="mr-1" />
+                                        Proctoring Dashboard
+                                    </motion.button>
+                                </Link>
+                            )}
                         </motion.div>
                     ))}
                 </motion.div>

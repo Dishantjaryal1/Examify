@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const connectDB = require('./config/db');
 const certificateRoutes = require('./routes/certificate');
 
@@ -16,14 +17,19 @@ const app = express();
 app.use(cors({
 
     origin: 'http://localhost:5173', 
+    credentials: true,
 
 }));
 app.use(express.json());
+
+// Serve static files for uploaded screenshots
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/exams', require('./routes/exams'));
 app.use('/api/results', require('./routes/results'));
 app.use('/api/certificate', certificateRoutes);
+app.use('/api/proctoring', require('./routes/proctoring'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

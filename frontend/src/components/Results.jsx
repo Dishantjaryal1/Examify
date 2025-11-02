@@ -210,10 +210,14 @@ const Results = () => {
                                                 <div className="flex justify-between items-center">
                                                     <div>
                                                         <div className="text-sm text-gray-500">Completion time: {result.duration ? `${Math.floor(result.duration / 60)}m ${result.duration % 60}s` : 'N/A'}</div>
+                                                        {result.exam?.timeLimit && (
+                                                            <div className="text-sm text-gray-500">Time limit: {result.exam.timeLimit} minutes</div>
+                                                        )}
                                                         <div className="text-sm text-gray-500">Questions: {totalQuestions}</div>
                                                         {result.autoSubmitted && (
                                                             <div className="text-sm text-red-500 mt-1">
-                                                                <span className="font-semibold">Auto-submitted</span> due to multiple tab switches ({result.tabSwitches} switches)
+                                                                <span className="font-semibold">Auto-submitted</span> 
+                                                                {result.timeExceeded ? ' due to time limit exceeded' : ` due to multiple tab switches (${result.tabSwitches} switches)`}
                                                             </div>
                                                         )}
                                                     </div>

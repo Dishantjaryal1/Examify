@@ -7,6 +7,7 @@ import Results from './components/Results';
 import Navbar from './components/Navbar';
 import Auth from './components/Auth';
 import Home from './components/Home'
+import ProctoringDashboard from './components/ProctoringDashboard';
 import { Footer } from './components/Footer';
 
 const ProtectedRoute = ({ children }) => {
@@ -61,6 +62,12 @@ const App = () => {
             <ProtectedRoute>
               <Exam />
             </ProtectedRoute>
+          } />
+
+          <Route path="/proctoring/:examId" element={
+            <ExaminerRoute>
+              <ProctoringDashboard />
+            </ExaminerRoute>
           } />
 
           <Route path="/results" element={

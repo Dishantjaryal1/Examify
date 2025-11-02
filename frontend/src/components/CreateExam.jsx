@@ -4,6 +4,7 @@ import { API_URL } from '../utils/api';
 
 const CreateExam = () => {
     const [title, setTitle] = useState('');
+    const [timeLimit, setTimeLimit] = useState(30); // Default 30 minutes
     const [questions, setQuestions] = useState([{ question: '', options: ['', '', '', ''], answer: '' }]);
 
     const addQuestion = () => {
@@ -31,10 +32,21 @@ const CreateExam = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
-        await axios.post(`${API_URL}/exams`, { title, questions }, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        window.location.href = '/dashboard';
+        
+        console.log('Creating exam with timeLimit:', timeLimit);
+        console.log('Exam data being sent:', { title, timeLimit, questions });
+        
+        try {
+            const response = await axios.post(`${API_URL}/exams`, { title, timeLimit, questions }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            console.log('Exam created successfully:', response.data);
+            window.location.href = '/dashboard';
+        } catch (error) {
+            console.error('Error creating exam:', error);
+            alert('Failed to create exam. Please try again.');
+        }
     };
 
     return (
@@ -47,6 +59,23 @@ const CreateExam = () => {
                 className="border border-gray-300 p-2 mb-4 w-full"
                 required
             />
+            <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Time Limit (minutes)
+                </label>
+                <input
+                    type="number"
+                    min="1"
+                    max="180"
+                    value={timeLimit}
+                    onChange={(e) => setTimeLimit(parseInt(e.target.value) || 30)}
+                    className="border border-gray-300 p-2 w-full"
+                    required
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                    Enter time limit in minutes (1-180 minutes)
+                </p>
+            </div>
             {questions.map((q, index) => (
                 <div key={index} className="mb-4">
                     <input
