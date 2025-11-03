@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 // src/components/Results.jsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { motion } from 'framer-motion';
 import { Download, Award, CheckCircle, XCircle, FileText } from 'lucide-react';
-import { API_URL } from '../utils/api';
 
 const Results = () => {
     const [results, setResults] = useState([]);
@@ -16,12 +15,9 @@ const Results = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const token = localStorage.getItem('token');
                 
                 // Fetch results
-                const resultsResponse = await axios.get(`${API_URL}/results`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const resultsResponse = await api.get('/results');
                 
                 // Filter out results with null exam data
                 const validResults = resultsResponse.data.filter(result => result && result.exam);
@@ -72,12 +68,10 @@ const Results = () => {
 
     const downloadCertificate = (resultId) => {
         setLoading(true);
-        const token = localStorage.getItem('token');
-        axios({
-            url: `${API_URL}/results/certificate/${resultId}`,
+        api({
+            url: `/results/certificate/${resultId}`,
             method: 'GET',
             responseType: 'blob',
-            headers: { Authorization: `Bearer ${token}` }
         }).then((response) => {
             const blob = new Blob([response.data], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);

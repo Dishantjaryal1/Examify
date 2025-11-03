@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { useParams } from 'react-router-dom';
 import { Eye, AlertTriangle, Users, Clock, Camera } from 'lucide-react';
-import { API_URL } from '../utils/api';
 
 const ProctoringDashboard = () => {
     const { examId } = useParams();
@@ -24,10 +23,7 @@ const ProctoringDashboard = () => {
 
     const fetchProctoringData = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/proctoring/exam/${examId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get(`/proctoring/exam/${examId}`);
             
             setProctoringData(response.data || []);
             setError(null);
@@ -237,7 +233,7 @@ const ProctoringDashboard = () => {
                                                             ?.filter(screenshot => screenshot.imageUrl && screenshot.imageUrl.startsWith('/uploads/'))
                                                             .slice(-6)
                                                             .map((screenshot, sIndex) => {
-                                                                const imgUrl = `${API_URL.replace('/api', '')}${screenshot.imageUrl}`;
+                                                                const imgUrl = `http://localhost:5000${screenshot.imageUrl}`;
                                                                 console.log('Screenshot URL:', imgUrl, screenshot);
                                                                 return (
                                                                     <div key={sIndex} className="relative">

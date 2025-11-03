@@ -45,7 +45,8 @@ exports.uploadScreenshot = async (req, res) => {
                 return res.status(400).json({ message: 'No screenshot file provided' });
             }
 
-            const { examId, userId, timestamp, faceDetected } = req.body;
+            const { examId, timestamp, faceDetected } = req.body;
+            const userId = req.user.id; // Get userId from authenticated user
             
             // Find or create proctoring data
             let proctoringData = await ProctoringData.findOne({
@@ -185,7 +186,8 @@ exports.addViolation = async (req, res) => {
 
 exports.endProctoringSession = async (req, res) => {
     try {
-        const { examId, userId } = req.body;
+        const { examId } = req.body;
+        const userId = req.user.id; // Get userId from authenticated user
         
         const proctoringData = await ProctoringData.findOne({
             examId: examId,

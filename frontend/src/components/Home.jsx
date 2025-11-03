@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { CheckCircle, Clock, Shield, ChevronRight, BookOpen, Users, BarChart } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -57,7 +59,7 @@ export default function Home() {
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.a
-                href={localStorage.getItem('token') ? "/dashboard" : "/signup"}
+                href={isAuthenticated ? "/dashboard" : "/signup"}
                 className="bg-blue-500 text-white font-semibold py-3 px-8 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-all shadow-md"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
@@ -220,7 +222,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Ready to transform your examination process?</h2>
             <p className="text-xl text-gray-700 mb-8">Join thousands of educators who have already made the switch to Examify.</p>
             <motion.a
-              href={localStorage.getItem('token') ? "/dashboard" : "/signup"}
+              href={isAuthenticated ? "/dashboard" : "/signup"}
               className="bg-blue-500 text-white font-semibold py-3 px-8 rounded-lg inline-flex items-center justify-center hover:bg-blue-600 transition-all shadow-md text-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}

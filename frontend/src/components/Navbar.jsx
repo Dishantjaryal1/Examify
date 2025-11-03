@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, User, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const location = useLocation();
-    
-    const role = localStorage.getItem('role');
-    const email = localStorage.getItem('username');
-    const username = email ? email.split('@')[0] : '';
-    
+    const { user, isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
     
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        localStorage.removeItem('username');
+    const role = user?.role;
+    const username = user?.username || '';
+    
+    const handleLogout = async () => {
+        await logout();
         navigate('/');
     };
    
-    if (!localStorage.getItem('token')) {
+    if (!isAuthenticated) {
         return null;
     }
 
@@ -74,7 +72,7 @@ const Navbar = () => {
                                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                                     <div className="px-4 py-2 text-sm text-gray-700 border-b">
                                         <div className="font-medium">Signed in as</div>
-                                        <div className="font-bold">{email}</div>
+                                        <div className="font-bold">{username}</div>
                                     </div>
                                     <button 
                                         onClick={handleLogout}

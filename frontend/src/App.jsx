@@ -9,9 +9,14 @@ import Auth from './components/Auth';
 import Home from './components/Home'
 import ProctoringDashboard from './components/ProctoringDashboard';
 import { Footer } from './components/Footer';
+import { useAuth } from './contexts/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('token');
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" />;
@@ -21,14 +26,17 @@ const ProtectedRoute = ({ children }) => {
 };
  
 const ExaminerRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
+  const { isAuthenticated, user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" />;
   }
 
-  if (role !== 'examiner') {
+  if (user?.role !== 'examiner') {
     return <Navigate to="/dashboard" />;
   }
 
@@ -76,11 +84,7 @@ const App = () => {
             </ProtectedRoute>
           } />
 
-          <Route path="*" element={
-            localStorage.getItem('token') ?
-              <Navigate to="/dashboard" /> :
-              <Navigate to="/" />
-          } />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
       <Footer/>
